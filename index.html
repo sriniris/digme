@@ -57,6 +57,10 @@
   crossorigin="anonymous"></script>
 
 <script type='text/javascript'>
+    var urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('a'))
+      console.log(urlParams.get('a'));
+  
     /* attach a submit handler to the form */
     $("#feedbackForm").submit(function(event) {
 
