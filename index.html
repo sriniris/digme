@@ -1,1 +1,70 @@
-This is a test
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<h2>Text Input</h2>
+
+<form id="feedbackForm">
+  From User:<br>
+  <select id="from">
+  	<option value="0"></option>
+  	<option value="1">Sam</option>
+    <option value="2">Srinath</option>
+    <option value="3">Bipin</option>
+    <option value="4">Xin</option>
+    <option value="5">Dave</option>
+  </select>
+  <br>
+  To User:<br>
+  <select id="to">
+  	<option value="0"></option>
+  	<option value="1">Sam</option>
+    <option value="2">Srinath</option>
+    <option value="3">Bipin</option>
+    <option value="4">Xin</option>
+    <option value="5">Dave</option>
+  </select>
+  <br>
+  Category:<br>
+  <select id="category">
+  	<option value="0"></option>
+  	<option value="1">Customer</option>
+    <option value="2">Winning Together</option>
+    <option value="3">Innovation</option>
+    <option value="4">Results</option>
+    <option value="5">Integrity</option>
+  </select>
+<br><br>
+<input type="submit" id="submitButton"  name="submitButton" value="Submit">
+</form>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<script type='text/javascript'>
+    /* attach a submit handler to the form */
+    $("#feedbackForm").submit(function(event) {
+
+      /* stop form from submitting normally */
+      event.preventDefault();
+
+      /* get the action attribute from the <form action=""> element */
+      var $form = $( this ),
+          url = 'http://google.com';
+
+      /* Send the data using post with element id name and name2*/
+      var posting = $.post( url, { from: $('#from').val(), to: $('#to').val(), category: $('#category').val() } );
+
+      /* Alerts the results */
+      posting.done(function( data ) {
+        alert('Your feedback has been submitted');
+      });
+    });
+</script>
+</body>
+</html>
