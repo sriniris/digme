@@ -77,7 +77,14 @@
                 var member = allMembers[i];
                 console.log(member);
                 if(member.eth_address !== toMemberAddress)
-                    select.options[select.options.length] = new Option(member.name, member.member_id);
+                {
+                    var isSelected = false;
+                    if(member.eth_address == 0xcdc1e53bdc74bbf5b5f715d6327dca5785e228b4)
+                        isSelected = true;
+                    
+                    select.options[select.options.length] = new Option(member.name, member.member_id, isSelected, isSelected);
+                                
+                }
             }
 
             var title = document.getElementById("title");
