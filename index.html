@@ -3,53 +3,22 @@
 <head>
 </head>
 <body>
-
-<h2>Text Input</h2>
-
 <form id="feedbackForm">
-  From User:<br>
-  <select id="from">
-  	<option value="0"></option>
-  	<option value="1">Sam</option>
-    <option value="2">Srinath</option>
-    <option value="3">Bipin</option>
-    <option value="4">Xin</option>
-    <option value="5">Dave</option>
-  </select>
-  <br>
-  To User:<br>
-  <select id="to">
-  	<option value="0"></option>
-  	<option value="1">Sam</option>
-    <option value="2">Srinath</option>
-    <option value="3">Bipin</option>
-    <option value="4">Xin</option>
-    <option value="5">Dave</option>
-  </select>
-  <br>
-  Category:<br>
-  <select id="category">
-  	<option value="0"></option>
-  	<option value="1">Collaboration</option>
-    <option value="2">Commitment to Excellence</option>
-    <option value="3">Communication Skills</option>
-    <option value="4">Courage</option>
-    <option value="5">Customer Orientation</option>
-	<option value="6">Decisiveness</option>
-	<option value="7">Customer Orientation</option>
-	<option value="8">Design Thinking</option>
-	<option value="9">Empowering Others</option>
-	<option value="10">Enterpreneurial Skill</option>
-	<option value="11">Interpersonal Awareness</option>
-	<option value="12">Personal Credibility</option>
-	<option value="13">Relationship Building</option>
-	<option value="14">Solutions Focus</option>
-	<option value="15">Strategic Thinking</option>
-  </select>
-<br><br>
-<input type="submit" id="submitButton"  name="submitButton" value="Submit">
+    Identify yourself:<br>
+    <select id="to">
+    </select>
+    <br>
+    Category:<br>
+    <select id="category">
+        <option value="1">Winning Together</option>
+        <option value="2">Results</option>
+        <option value="3">Customers</option>
+        <option value="4">Integrity</option>
+        <option value="7">Innovation</option>
+    </select>
+    <br><br>
+    <input type="submit" id="submitButton" name="submitButton" value="Submit">
 </form>
-
 
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -57,10 +26,54 @@
   crossorigin="anonymous"></script>
 
 <script type='text/javascript'>
+
+    function getMemberIdFromAddress(address, allMembers)
+    {
+        for (var i = 0; i < members.length; i++) {
+            var member = members[i];
+            if (member.eth_address === address)
+                return member.member_id;
+        }
+
+        return 0;
+    }
+
+    var members;
+    var memberAddress;
+
     var urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('a'))
-      console.log(urlParams.get('a'));
-  
+    if (urlParams.has('a'))
+    {
+        memberAddress = urlParams.get('a');
+        console.log(memberAddress);
+    }
+    
+    /* Get Member data */
+    var memberUrl = 'https://dit.apidp.dell.com/digrest/MembersCall?apikey=9307c029-d518-4d69-8fee-9a28dea8d844';
+    $.ajax({
+        url: memberUrl,
+        dataType: 'json',
+        crossDomain: true,
+        async: false,
+        success: function (data) {
+            members = data;
+            console.log(members);
+            var select = document.getElementById("to");
+            for (var i = 0; i < members.length; i++) {
+                var member = members[i];
+                console.log(member);
+                select.options[select.options.length] = new Option(member.name, member.member_id);
+            }
+        },
+
+        //error: function (jqXHR, textStatus, errorThrown) {
+        //    alert(jqXHR.status);
+        //    alert(textStatus);
+        //    alert(errorThrown);
+        //}
+    });
+
+
     /* attach a submit handler to the form */
     $("#feedbackForm").submit(function(event) {
 
@@ -68,11 +81,11 @@
       event.preventDefault();
 
       /* get the action attribute from the <form action=""> element */
-      var $form = $( this ),
-          url = 'http://google.com';
+      var $form = $( this );
+      var karmaUrl = 'https://dit.apidp.dell.com/digrest/karmas?apikey=9307c029-d518-4d69-8fee-9a28dea8d844';
 
       /* Send the data using post with element id name and name2*/
-      var posting = $.post( url, { from: $('#from').val(), to: $('#to').val(), category: $('#category').val() } );
+      var posting = $.post(karmaUrl, { members_id: $('#to').val(), skill_id: $('#category').val(), points: 1, from_member_id: getMemberIdFromAddress(memberAddress, members) });
 
       /* Alerts the results */
       posting.done(function( data ) {
@@ -80,5 +93,6 @@
       });
     });
 </script>
+
 </body>
 </html>
