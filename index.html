@@ -3,6 +3,9 @@
 <head>
 </head>
 <body>
+<div>
+    <h3 id=title></h1>
+</div>
 <form id="feedbackForm">
     Identify yourself:<br>
     <select id="to">
@@ -38,8 +41,20 @@
         return 0;
     }
 
+    function getMemberNameFromAddress(address, allMembers)
+    {
+        for (var i = 0; i < members.length; i++) {
+            var member = members[i];
+            if (member.eth_address === address)
+                return member.name;
+        }
+
+        return 0;
+    }
+
     var members;
     var memberAddress;
+    var memberName;
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('a'))
@@ -64,6 +79,9 @@
                 console.log(member);
                 select.options[select.options.length] = new Option(member.name, member.member_id);
             }
+
+            var title = document.getElementById("title");
+            title.innerText = "You are giving Karma point to " + getMemberNameFromAddress(memberAddress, members);
         },
 
         //error: function (jqXHR, textStatus, errorThrown) {
@@ -85,7 +103,7 @@
       var karmaUrl = 'https://dit.apidp.dell.com/digrest/karmas?apikey=9307c029-d518-4d69-8fee-9a28dea8d844';
 
       /* Send the data using post with element id name and name2*/
-      var posting = $.post(karmaUrl, { members_id: $('#to').val(), skill_id: $('#category').val(), points: 1, from_member_id: getMemberIdFromAddress(memberAddress, members) });
+      var posting = $.post(karmaUrl, { from_member_id: $('#to').val(), skill_id: $('#category').val(), points: 1, members_id: getMemberIdFromAddress(memberAddress, members) });
 
       /* Alerts the results */
       posting.done(function( data ) {
